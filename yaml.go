@@ -12,6 +12,7 @@ import (
 	"reflect"
 	"strings"
 	"sync"
+	"time"
 )
 
 // MapSlice encodes and decodes as a YAML map.
@@ -324,6 +325,10 @@ func getStructInfo(st reflect.Type) (*structInfo, error) {
 }
 
 func isZero(v reflect.Value) bool {
+	iface := v.Interface()
+	if m, ok := iface.(time.Time); ok {
+		return m.IsZero()
+	}
 	switch v.Kind() {
 	case reflect.String:
 		return len(v.String()) == 0
